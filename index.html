@@ -18,37 +18,24 @@
   <body>
     <div id="map"></div>
     <script type="module">
-      // Initialisiere die Karte
       const map = L.map('map');
       L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: 'Map data &copy; <a href="http://www.osm.org">OpenStreetMap</a>'
       }).addTo(map);
-
-      // GPX-URLs
       const url1 = 'https://raw.githubusercontent.com/BenjaminBleske/IPMFahrt/refs/heads/main/Route%20Teil%20%201.gpx';
       const url2 = 'https://raw.githubusercontent.com/BenjaminBleske/IPMFahrt/refs/heads/main/Route%20Teil%202.gpx';
-
-      // Optionen für die GPX-Layer
       const options = {
         async: true,
-        polyline_options: { color: 'red' },
+        polyline_options: { color: 'blue', opacity: 0.55 },
       };
-
-      // Gemeinsame Bounds, um beide GPX-Routen in den sichtbaren Bereich zu setzen.
       let bounds = L.latLngBounds();
-
-      // Funktion, die aufgerufen wird, sobald ein GPX-Layer geladen wurde
       const onGpxLoaded = function(e) {
         bounds.extend(e.target.getBounds());
         map.fitBounds(bounds);
       };
-
-      // Erstelle den ersten GPX-Layer
       const gpx1 = new L.GPX(url1, options)
         .on('loaded', onGpxLoaded)
         .addTo(map);
-
-      // Erstelle den zweiten GPX-Layer
       const gpx2 = new L.GPX(url2, options)
         .on('loaded', onGpxLoaded)
         .addTo(map);
