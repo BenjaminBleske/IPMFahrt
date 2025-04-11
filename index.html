@@ -1,0 +1,57 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js" defer></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet-gpx/2.1.2/gpx.min.js" defer></script>
+    <style>
+      html, body {
+        height: 100%;
+        margin: 0;
+        padding: 0;
+      }
+      #map {
+        height: 100%;
+        width: 100%;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script type="module">
+      // Initialisiere die Karte
+      const map = L.map('map');
+      L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: 'Map data &copy; <a href="http://www.osm.org">OpenStreetMap</a>'
+      }).addTo(map);
+
+      // GPX-URLs
+      const url1 = 'https://cdn.glitch.global/4522e216-7990-4326-bec1-8c0f86e00bc5/Route%20Teil%20%201.gpx?v=1744380106120';
+      const url2 = 'https://cdn.glitch.global/4522e216-7990-4326-bec1-8c0f86e00bc5/Route%20Teil%202.gpx?v=1744380208710';
+
+      // Optionen für die GPX-Layer
+      const options = {
+        async: true,
+        polyline_options: { color: 'red' },
+      };
+
+      // Gemeinsame Bounds, um beide GPX-Routen in den sichtbaren Bereich zu setzen.
+      let bounds = L.latLngBounds();
+
+      // Funktion, die aufgerufen wird, sobald ein GPX-Layer geladen wurde
+      const onGpxLoaded = function(e) {
+        bounds.extend(e.target.getBounds());
+        map.fitBounds(bounds);
+      };
+
+      // Erstelle den ersten GPX-Layer
+      const gpx1 = new L.GPX(url1, options)
+        .on('loaded', onGpxLoaded)
+        .addTo(map);
+
+      // Erstelle den zweiten GPX-Layer
+      const gpx2 = new L.GPX(url2, options)
+        .on('loaded', onGpxLoaded)
+        .addTo(map);
+    </script>
+  </body>
+</html>
